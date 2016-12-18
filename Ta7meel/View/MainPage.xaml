@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+		xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+		xmlns:local="clr-namespace:Ta7meel;assembly=Ta7meel" x:Class="Ta7meel.MainPage">
+	<ContentPage.BindingContext>
+		<local:MainPageViewModel />
+	</ContentPage.BindingContext>
+	<ContentPage.ToolbarItems>
+		<ToolbarItem Text="New" Order="Primary" Command="{Binding AddCommand}">
+		</ToolbarItem>
+	</ContentPage.ToolbarItems>
+	<ContentPage.Resources>
+		<ResourceDictionary>
+		<local:IntToBoolConverter x:Key="intToBool" />
+		<local:IntToInverseBoolConverter x:Key="IntToInverseBool"/>	
+		</ResourceDictionary>
+</ContentPage.Resources>
+	<ContentPage.Content>
+		 <StackLayout Spacing="10" x:Name="layout" VerticalOptions="FillAndExpand" HorizontalOptions="Center">
+		 		
+		<StackLayout Spacing="0" VerticalOptions="FillAndExpand" IsVisible="{Binding VideoCount, Converter={StaticResource intToBool}}">
+		<ListView x:Name="VidListView" ItemsSource="{Binding DownloadedList}" SelectedItem="{Binding ListItemSelected, Mode=TwoWay}" >
+			<ListView.RowHeight>
+				<OnPlatform x:TypeArguments="x:Int32" iOS="80" Android="80" />
+			</ListView.RowHeight>
+			<ListView.ItemTemplate>
+				<DataTemplate>
+					<ViewCell x:Name="viewCell">
+							<ViewCell.ContextActions>
+								<MenuItem Text="Remove" 
+										IsDestructive="True"
+										Command="{Binding RemoveCommand}" 
+										BindingContext="{Binding Source={x:Reference VidListView}, Path=BindingContext}"
+                                        CommandParameter="{Binding Source={x:Reference viewCell}, Path=BindingContext}"
+										/>
+							</ViewCell.ContextActions>
+							
+						<ContentView Padding="5">
+							<StackLayout Orientation="Horizontal" Padding="5">
+								
+								<Image WidthRequest="100" HeightRequest="100" Source="{Binding VideoThumbnail}" />
+								<StackLayout HorizontalOptions="FillAndExpand">
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition Width="9*" />
+											<ColumnDefinition Width="1*" />
+										</Grid.ColumnDefinitions>
+										<Label Grid.Row="0" Grid.Column="0" Text="{Binding VideoName}" FontSize="22" VerticalOptions="StartAndExpand" />
+										<ActivityIndicator  Grid.Row="0"   Grid.Column="1" Color="Blue"  IsRunning="{Binding IsDownloading}" />
+									</Grid>
+
+									<Label Text="{Binding VideoTime}" FontSize="16" VerticalOptions="CenterAndExpand" />
+								</StackLayout>
+							</StackLayout>
+						</ContentView>
+							
+					</ViewCell>
+				</DataTemplate>
+			</ListView.ItemTemplate>
+			<ListView.Footer>
+   			 <Label />
+			</ListView.Footer>
+		</ListView>
+	</StackLayout>
+			<StackLayout  Margin="0,40,0,0" VerticalOptions="Center" HorizontalOptions="Center" IsVisible="false">
+				<Image Source="downloading.png" WidthRequest="100" HeightRequest="100"/>
+				<Label Text="Click on New button to download new video!" HorizontalOptions="Center"/>
+				<Label Text="Copy link from youtube app - it will imported automatically" HorizontalOptions="Center"/>
+				</StackLayout>
+			</StackLayout>
+	</ContentPage.Content>
+</ContentPage>

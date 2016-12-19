@@ -17,7 +17,10 @@ namespace Ta7meel.Droid
 		public string GetCopiedLinkFromClipboard()
 		{
 			var clipboardManager = (ClipboardManager)Forms.Context.GetSystemService(Context.ClipboardService);
-			return clipboardManager.Text;
+			if (clipboardManager.HasText)
+				return clipboardManager.Text;
+			else
+				return "";
 		}
 
 		public string GetVideoDuration(string url)

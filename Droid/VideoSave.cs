@@ -10,11 +10,14 @@ namespace Ta7meel.Droid
 		public static void SaveVideoToExternalStorage( string path)
 		{
 			Java.IO.File root = Android.OS.Environment.ExternalStorageDirectory;
-			Java.IO.File myDir = new Java.IO.File(root, "Ta7meelVideos");
-			if (myDir.Mkdir())
+			Java.IO.File appDir = new Java.IO.File(root, "Ta7meelVideos");
+			if (!appDir.Exists())
 			{
+				if (!appDir.Mkdir())
+					return;
+			}
 				Java.IO.File videoDownloadedFile = new Java.IO.File(path);
-				Java.IO.File file = new Java.IO.File(myDir, videoDownloadedFile.Name);
+				Java.IO.File file = new Java.IO.File(appDir, videoDownloadedFile.Name);
 				if (!file.Exists())
 				{
 					try
@@ -41,7 +44,7 @@ namespace Ta7meel.Droid
 
 				}
 
-			}
+			
 		}
 	}
 
